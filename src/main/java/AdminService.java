@@ -7,11 +7,6 @@ import java.util.*;
  */
 public class AdminService extends Human {
 
-    private ArrayList<Ticket> tickets;
-    private ArrayList<Specialist> specialists;
-
-    private ArrayList<Ticket> repairedTicket;
-
     private ServiceCentre serviceCentre = ServiceCentre.getServiceCentre();
 
     private static int key = 0;
@@ -23,9 +18,6 @@ public class AdminService extends Human {
     public AdminService(String name) {
         super(name);
     }
-
-
-
 
     /**
      * Take Product for repairing (cost of repairs = 10% of price of Product)
@@ -47,9 +39,11 @@ public class AdminService extends Human {
         clientWithProduct.setCash(clientWithProduct.getCash() - (product.getPrice() * 0.1));
         double repairedMoney = serviceCentre.getMoney();   // earned money at all
         serviceCentre.setMoney(repairedMoney + (product.getPrice() * 0.1));
-        Ticket ticket = new Ticket(key, product, new Date(), null, clientWithProduct);
+
+        Ticket ticket = serviceCentre.createTicket(key, product, new Date(), null, clientWithProduct);
+
         ClientTicket clientTicket = new ClientTicket(ticket);
-        tickets.add(clientTicket.getTicket());
+        serviceCentre.addTicket(ticket);
         return clientTicket;
     }
 
@@ -61,8 +55,8 @@ public class AdminService extends Human {
 
     public Product giveProductToClient(ClientTicket clientTicket) {
 
-        if (tickets.remove(clientTicket.getTicket())) {
-            repairedTicket.add(clientTicket.getTicket());
+        if (serviceCentre.removeTicket(clientTicket.getTicket())) {
+            serviceCentre.addRepairedTicket(clientTicket.getTicket());
         } else {
             System.out.println("There is not such product in service");
         }
@@ -77,7 +71,8 @@ public class AdminService extends Human {
      */
 
     public boolean giveProductToSpecialist(Ticket ticket, Specialist specialist) {
-        return specialist.addTicket(ticket);
+        Ticket ticket1 = serviceCentre.getTicket(ticket);
+        return specialist.addTicket(ticket1);     //TODO:
     }
 
     /**
@@ -86,7 +81,7 @@ public class AdminService extends Human {
      * @return true if Admin receive Product (specialist gave Product to Admin)
      */
     public boolean takeProductFromSpecialist(Ticket ticket) {
-        for (Iterator iter = specialists.iterator(); iter.hasNext(); ) {
+        for (Iterator iter = serviceCentre.getSpecialists().iterator(); iter.hasNext(); ) {
             Specialist specialist = (Specialist) iter.next();
             for (Iterator it = specialist.getItems().iterator(); it.hasNext(); ) {
                 Ticket t = (Ticket) it.next();
@@ -107,7 +102,7 @@ public class AdminService extends Human {
     public boolean takeProductFromSpecialistStream(Ticket ticket) {
         final boolean[] f = {false};
 
-        specialists.stream().flatMap(t ->
+        serviceCentre.getSpecialists().stream().flatMap(t ->
                 t.getItems().stream().map(d -> {
 
                             if (d.getNumber() == ticket.getNumber()) {
@@ -127,9 +122,9 @@ public class AdminService extends Human {
 
     public void showAllClients() {
         Set<ClientWithProduct> clientWithProductSet = new HashSet<>();
-        for (Iterator it = tickets.iterator(); it.hasNext(); ) {
-            Ticket nextClient = (Ticket) it.next();
-            System.out.println( nextClient.getClient().toString());
+        for (Iterator it = serviceCentre.getClientWithProducts().iterator(); it.hasNext(); ) {
+            ClientWithProduct nextClient = (ClientWithProduct) it.next();
+            System.out.println( nextClient.toString());
         }
     }
 
@@ -168,7 +163,7 @@ public class AdminService extends Human {
 
         int amount = 0;
 
-        for (Iterator iterator = repairedTicket.iterator(); iterator.hasNext();) {
+        for (Iterator iterator = serviceCentre.getRepairedTickets().iterator(); iterator.hasNext();) {
             Ticket ticket = (Ticket) iterator.next();
             if (ticket.getPutTime().getTime() >= (new Date().getTime() - range)) {
                 amount++;

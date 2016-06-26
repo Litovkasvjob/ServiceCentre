@@ -15,6 +15,7 @@ public class ServiceCentre {
     private ArrayList<Specialist> specialists;
     private ArrayList<ClientWithProduct> clientWithProducts;
     private ArrayList<Ticket> tickets;
+    private ArrayList<Ticket> repairedTickets;
     private Director director;
     private Address address;
     private String name; // name of company
@@ -163,7 +164,26 @@ public class ServiceCentre {
         return tickets.remove(ticket);
     }
 
+    public Ticket getTicket(Ticket ticket) {
+        int index;
+        if (tickets.indexOf(ticket) == -1) {
+            System.out.println("There is not such ticket (product) in service");
+            return null;   //TODO:
+        } else {
+            index = tickets.indexOf(ticket);
+        }
+        return tickets.get(index);
+    }
 
+    public boolean addRepairedTicket(Ticket ticket) {
+        return repairedTickets.add(ticket);
+    }
 
+    public ArrayList<Ticket> getRepairedTickets() {
+        return repairedTickets;
+    }
 
+    public void setRepairedTickets(ArrayList<Ticket> repairedTickets) {
+        this.repairedTickets = repairedTickets;
+    }
 }

@@ -6,10 +6,10 @@
 
 public class Director extends Human {
 
-    private ServiceCentre company;
+    private ServiceCentre serviceCentre;
 
-    public Director(String name, int age, double cash) {
-        super(name, age, cash);
+    public Director(String name, int age, double salary) {
+        super(name, age, salary);
     }
 
     public Director(String name) {
