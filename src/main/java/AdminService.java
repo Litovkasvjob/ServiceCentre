@@ -12,12 +12,12 @@ public class AdminService extends Human {
 
     private ArrayList<Ticket> repairedTicket;
 
-
+    private ServiceCentre serviceCentre = ServiceCentre.getServiceCentre();
 
     private static int key = 0;
 
-    public AdminService(String name, int age, double cash) {
-        super(name, age, cash);
+    public AdminService(String name, int age, double salary) {
+        super(name, age, salary);
     }
 
     public AdminService(String name) {
@@ -41,8 +41,8 @@ public class AdminService extends Human {
 
         key += 1;
         clientWithProduct.setCash(clientWithProduct.getCash() - (product.getPrice() * 0.1));
-        double repairedMoney = ServiceCentre.getServiceCentre().getMoney();   // money for repair
-        ServiceCentre.getServiceCentre().setMoney(repairedMoney + (product.getPrice() * 0.1));
+        double repairedMoney = serviceCentre.getMoney();   // earned money at all
+        serviceCentre.setMoney(repairedMoney + (product.getPrice() * 0.1));
         Ticket ticket = new Ticket(key, product, new Date(), null, clientWithProduct);
         ClientTicket clientTicket = new ClientTicket(ticket);
         tickets.add(clientTicket.getTicket());
@@ -50,7 +50,7 @@ public class AdminService extends Human {
     }
 
     /**
-     * Give Product to CliantWithProduct insead of clientTicket
+     * Give Product to CliantWithProduct instead of clientTicket
      * @param clientTicket
      * @return Product
      */

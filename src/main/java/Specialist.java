@@ -11,8 +11,9 @@ public class Specialist extends Human {
     private ArrayList<Ticket> items;
     //private Admin admin;
 
-        public Specialist(String name, int age) {
-        super(name, age, 0);
+
+    public Specialist(String name, int age, double salary) {
+        super(name, age, salary);
     }
 
     public Specialist(String name) {

@@ -1,10 +1,23 @@
+import java.util.ArrayList;
+
 /**
- * Created by SergLion on 25.06.2016.
+ * User: Litovka Sergii
+ * Date: 25.06.2016
+ * Time: 11:58
  */
 public class ServiceCentre {
 
     private static volatile ServiceCentre serviceCentre;
 
+    private double money = 0;
+    private ArrayList<AdminService> administrators;
+    private ArrayList<Specialist> specialists;
+    private ArrayList<Ticket> tickets;
+    private Director director;
+    private Adress adress;
+    private String name; // name of company
+
+    // create Singletone
     private ServiceCentre() {
     }
 
@@ -19,7 +32,7 @@ public class ServiceCentre {
         return serviceCentre;
     }
 
-    private double money = 0;
+
 
     public double getMoney() {
         return money;
