@@ -25,6 +25,8 @@ public class AdminService extends Human {
     }
 
 
+
+
     /**
      * Take Product for repairing (cost of repairs = 10% of price of Product)
      * @param product
@@ -36,10 +38,12 @@ public class AdminService extends Human {
 
         if (clientWithProduct.getCash() < (product.getPrice() * 0.1)) {
             System.out.println("You have a little money to repair the " + product.getModel());
-            return null;
+            return null;  // TODO:  лучше здесь кинуть исключение
         }
-
         key += 1;
+
+        serviceCentre.addClientWithProduct(clientWithProduct);
+
         clientWithProduct.setCash(clientWithProduct.getCash() - (product.getPrice() * 0.1));
         double repairedMoney = serviceCentre.getMoney();   // earned money at all
         serviceCentre.setMoney(repairedMoney + (product.getPrice() * 0.1));
@@ -50,7 +54,7 @@ public class AdminService extends Human {
     }
 
     /**
-     * Give Product to CliantWithProduct instead of clientTicket
+     * Give Product to ClientWithProduct instead of clientTicket
      * @param clientTicket
      * @return Product
      */

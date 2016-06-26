@@ -39,20 +39,20 @@ public class ClientWithProduct extends Human implements Client {
 
 
     @Override
-    public boolean giveProductForRepair(AdminService adminService, Product product) {
-        if (adminService.receiveProduct(product, this).equals(null)) {
+    public boolean giveProductForRepair(AdminService administrator, Product product) {
+        if (administrator.receiveProduct(product, this).equals(null)) {
             return false;
         }
 
-        if (clientTickets.add(adminService.receiveProduct(product, this))) {
+        if (clientTickets.add(administrator.receiveProduct(product, this))) {
             return products.remove(product);
         }
         return false;
     }
 
     @Override
-    public boolean takeProduct(AdminService adminService, ClientTicket clientTicket) {
-        return products.add(adminService.giveProductToClient(clientTicket));
+    public boolean takeProduct(AdminService administrator, ClientTicket clientTicket) {
+        return products.add(administrator.giveProductToClient(clientTicket));
     }
 
     @Override

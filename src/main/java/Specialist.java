@@ -24,9 +24,9 @@ public class Specialist extends Human {
         return items;
     }
 
-    public void setItems(ArrayList<Ticket> items) {
+    /*public void setItems(ArrayList<Ticket> items) {
         this.items = items;
-    }
+    }*/
 
     public boolean addTicket(Ticket ticket) {
         return  items.add(ticket);

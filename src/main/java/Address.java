@@ -3,7 +3,7 @@
  * Date: 26.06.2016
  * Time: 11:42
  */
-public class Adress {
+public class Address {
 
     private String city;
     private String street;
