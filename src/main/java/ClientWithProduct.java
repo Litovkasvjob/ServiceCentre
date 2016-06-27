@@ -7,18 +7,21 @@ import java.util.ArrayList;
  */
 public class ClientWithProduct extends Human implements Client {
 
-    private ArrayList<Product> products;
-    private ArrayList<ClientTicket> clientTickets;
+    private ArrayList<Product> products = new ArrayList<>();
+    private ArrayList<ClientTicket> clientTickets = new ArrayList<>();
+    private static int idStatic = 1;
+    private int id = 0;
+
 
 
     public ClientWithProduct(String name, int age, double cash) {
         super(name, age, cash);
-        products = new ArrayList<Product>();
+        this.id = idStatic++;
     }
 
     public ClientWithProduct(String name) {
         super(name);
-        products = new ArrayList<Product>();
+        this.id = idStatic++;
     }
 
     public ArrayList<Product> getProducts() {
@@ -66,8 +69,12 @@ public class ClientWithProduct extends Human implements Client {
         return false;
     }
 
+    public int getId() {
+        return id;
+    }
+
     @Override
     public String toString() {
-        return "ClientWithProduct" + super.toString();
+        return "ClientWithProduct: id = " + getId() + super.toString();
     }
 }
