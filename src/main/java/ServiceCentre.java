@@ -104,16 +104,23 @@ public class ServiceCentre {
     }
 
     /**
+     * Add Administrator
+     * @param administrator
+     * @return true if add
+     */
+    public boolean addAdministrator(AdminService administrator) {
+        return administrators.add(administrator);
+    }
+
+    /**
      * Create Administrator
      * @param name
      * @return administrator
      */
-    public AdminService addAdministrator(String name) {
-        AdminService adminService = new AdminService(name);
-        administrators.add(adminService);
-        //int index = administrators.indexOf(adminService);
-        //return administrators.get(index);
-        return adminService;
+
+    public AdminService createAdministrator(String name) {
+        AdminService administrator = new AdminService(name);
+        return administrator;
     }
 
     /**

@@ -9,15 +9,18 @@ import java.util.Date;
 public class Specialist extends Human {
 
     private ArrayList<Ticket> items;
-    //private Admin admin;
+    private static int idStatic = 1;
+    private int id = 0;
 
 
     public Specialist(String name, int age, double salary) {
         super(name, age, salary);
+        this.id = idStatic++;
     }
 
     public Specialist(String name) {
         super(name);
+        this.id = idStatic++;
     }
 
     public ArrayList<Ticket> getItems() {
@@ -54,5 +57,12 @@ public class Specialist extends Human {
         return false;
     }
 
+    public int getId() {
+        return id;
+    }
 
+    @Override
+    public String toString() {
+        return "Specialist {" + getId() + '}' + super.toString();
+    }
 }

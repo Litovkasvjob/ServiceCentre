@@ -7,7 +7,7 @@ public class Address {
 
     private String city;
     private String street;
-    private int house;
+    private String house;
     private int flat;
 
     public String getCity() {
@@ -26,11 +26,11 @@ public class Address {
         this.street = street;
     }
 
-    public int getHouse() {
+    public String getHouse() {
         return house;
     }
 
-    public void setHouse(int house) {
+    public void setHouse(String house) {
         this.house = house;
     }
 

@@ -10,13 +10,17 @@ public class AdminService extends Human {
     private ServiceCentre serviceCentre = ServiceCentre.getServiceCentre();
 
     private static int key = 0;
+    private static int idStatic = 1;
+    private int id = 0;
 
     public AdminService(String name, int age, double salary) {
         super(name, age, salary);
+        this.id = idStatic++;
     }
 
     public AdminService(String name) {
         super(name);
+        this.id = idStatic++;
     }
 
     /**
@@ -134,7 +138,7 @@ public class AdminService extends Human {
 
     public void showReportAboutProduct() {
         Scanner scanner = new Scanner(System.in);
-        int range = 0;
+        long range = 0;
         boolean flag = true;
         while (flag) {
             System.out.println("Enter the range:\n1 - 1 day\n2 - 1 weeak\n3 - 1 month");
@@ -150,7 +154,7 @@ public class AdminService extends Human {
                         flag = false;
                         break;
                     case 3:
-                        range = 1000 * 60 * 60 * 24 * 7 * 30; // one month
+                        range = (long) (1000 * 60 * 60 * 24 * 30); // one month
                         flag = false;
                         break;
                     default:
@@ -173,7 +177,14 @@ public class AdminService extends Human {
         System.out.println("Amount of repaired products is " + amount);
     }
 
+    public int getId() {
+        return id;
+    }
 
+    @Override
+    public String toString() {
+        return "Administrator {" + getId() + '}' + super.toString();
+    }
 }
 
 
