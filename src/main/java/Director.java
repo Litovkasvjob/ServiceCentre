@@ -11,6 +11,7 @@ import java.util.Scanner;
 public class Director extends Human {
 
     private ServiceCentre serviceCentre = ServiceCentre.getServiceCentre();
+    private Scanner scanner = new Scanner(System.in);
 
     public Director(String name, int age, double salary) {     // TODO: Director as a Singleton ?
         super(name, age, salary);
@@ -94,7 +95,6 @@ public class Director extends Human {
     }
 
     public void showReportAboutMoney() {
-        Scanner scanner = new Scanner(System.in);
         long range = 0;
         boolean flag = true;
         while (flag) {
@@ -132,5 +132,14 @@ public class Director extends Human {
 
         }
         System.out.println("Money are " + amount);
+    }
+
+    public Product createProduct() {
+        System.out.println("Enter model of Product");
+        String model = scanner.next();
+        System.out.println("Enter price of Product");
+        double price = scanner.nextDouble();
+        Product product = new Product(model, price);
+        return product;
     }
 }

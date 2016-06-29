@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Random;
 
 /**
  * User: Litovka Sergii
@@ -13,9 +14,11 @@ public class ServiceCentre {
     private double money = 0;
     private ArrayList<AdminService> administrators;
     private ArrayList<Specialist> specialists;
+    private ArrayList<ClientWithProduct> waitingProductToRepair;     //
     private ArrayList<ClientWithProduct> clientWithProducts;
     private ArrayList<Ticket> tickets;
     private ArrayList<Ticket> repairedTickets;
+    private ArrayList<Product> products; //Product to buy
     private Director director;
     private Address address;
     private String name; // name of company
@@ -37,6 +40,23 @@ public class ServiceCentre {
             }
         }
         return serviceCentre;
+    }
+
+    public ArrayList<Product> getProducts() {
+        return products;
+    }
+
+    public void setProducts(ArrayList<Product> products) {
+        this.products = products;
+    }
+
+    public void showProducts() {
+        if (!getProducts().isEmpty()) {
+            getProducts().stream().forEach(e -> System.out.println(e.toString()));
+        } else {
+            System.out.println("There is not product to show, director can create product");
+        }
+
     }
 
     public double getMoney() {
@@ -130,6 +150,14 @@ public class ServiceCentre {
      */
     public boolean removeAdministrator(AdminService administrator) {
         return administrators.remove(administrator);
+    }
+
+    public AdminService getAdministrator() {
+        if (getAdministrators().isEmpty()) {
+            return null;
+        }
+        int num = (int) (Math.random() * (getAdministrators().size())); // Random Administrator
+        return getAdministrators().get(num);
     }
 
     public boolean addSpecialist(Specialist specialist) {

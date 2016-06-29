@@ -8,6 +8,7 @@ import java.util.*;
 public class AdminService extends Human {
 
     private ServiceCentre serviceCentre = ServiceCentre.getServiceCentre();
+    private Scanner scanner = new Scanner(System.in);
 
     private static int key = 0;
     private static int idStatic = 1;
@@ -58,11 +59,47 @@ public class AdminService extends Human {
      */
 
     public Product giveProductToClient(ClientTicket clientTicket) {
+        boolean flag = false;
+        for (Ticket ticket : serviceCentre.getTickets()) {
+            if (ticket == clientTicket.getTicket()) {
 
+            }
+        }
+          // есть ли билет в базе?
+        System.out.println("Revise Product, is it repair?"); //TODO: проверить отремонтирован ли продукт
+        if (clientTicket.getProduct().isFixed()) {
+            System.out.println("Product is fixed");
+            flag = true;
+        } else {
+            System.out.println("Product is not fixed");
+            System.out.println("Do you want to take it? yes or no");
+            String answer = scanner.next();
+            while (true){
+                if (answer.equals("yes")) {
+                    flag = true;
+                    break;
+                } else if (answer.equals("no")) {
+                    flag = false;
+                    break;
+                } else {
+                    System.out.println("You enter uncorrect symbols");
+                }
+            }
+        }
+
+        if (!flag) {
+            return null;
+        } else {
+
+        }
         if (serviceCentre.removeTicket(clientTicket.getTicket())) {
             serviceCentre.addRepairedTicket(clientTicket.getTicket());
+            if (clientTicket.getTicket().getClient().getClientTickets().isEmpty()) {
+                serviceCentre.removeClientWithProduct(clientTicket.getTicket().getClient());
+            }
         } else {
             System.out.println("There is not such product in service");
+            return null;
         }
         return clientTicket.getProduct();
     }

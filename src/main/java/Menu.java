@@ -132,21 +132,17 @@ public class Menu {
                     System.out.println("Enter you id");
                     int id = scanner.nextInt();
 
-                    boolean flag = false;     //TODO: определить создаг ли клиент с таким id
+                    boolean flag = false;
                     for (ClientWithProduct clientWithProduct : clientWithProducts) {
                         if (clientWithProduct.getId() == id) {
-                            showClientMenu(id);
+                            showClientMenu(clientWithProduct);
+                            flag = true;
                             break;
                         }
                     }
-                    for (Iterator iter = clientWithProducts.iterator(); iter.hasNext(); ) {
-                        ClientWithProduct cl = (ClientWithProduct) iter.next();
-
-
+                    if (!flag) {
+                        System.out.println("There is not Client with id = " + id);
                     }
-
-
-
                 } else {
                     System.out.println("Client is not exist, create him");
                 }
@@ -174,11 +170,12 @@ public class Menu {
             System.out.println("5. Pay Tax");
             System.out.println("6. Look at Money");
             System.out.println("7. Pay the Salary");
-            System.out.println("8. Back");
+            System.out.println("8. Create Product");
+            System.out.println("9. Back");
 
             System.out.println("Input number of menu");
             int num = scanner.nextInt();
-            if (num == 8) break;
+            if (num == 9) break;
             logicDirector(num);
         }
 
@@ -207,7 +204,7 @@ public class Menu {
         System.out.println("2. Return Product to Admin");
     }
 
-    public void showClientMenu(int id) { // id to identify Client
+    public void showClientMenu(ClientWithProduct clientWithProduct) { // id to identify Client
         while (true) {
             System.out.println("1. Give Product to repair");
             System.out.println("2. Buy Product");
@@ -215,9 +212,9 @@ public class Menu {
             System.out.println("4. Back");
 
             System.out.println("Input number of menu");
-            int num = scanner.nextInt();
-            if (num == 4) break;
-            logicClient(num);
+            int numType = scanner.nextInt();
+            if (numType == 4) break;
+            logicClient(numType , clientWithProduct);
         }
 
     }
@@ -335,8 +332,9 @@ public class Menu {
             default:
                 System.out.println("You enter uncorrect symbol");
                 break;
-
-
+            case 8:
+                serviceCentre.getDirector().createProduct();
+                break;
         }
     }
 
@@ -349,9 +347,72 @@ public class Menu {
 
     }
 
-    public void logicClient(int num) {
-        switch (num) {
+    public void logicClient(int numType, ClientWithProduct clientWithProduct) {
+        switch (numType) {
             case 1:  //Give Product to repair
+                if (!clientWithProduct.getProducts().isEmpty()) {
+                    System.out.println("Product to repair");
+                    clientWithProduct.showAllClientProduct();
+                    System.out.println("Enter Product id to repair");
+                    int id = scanner.nextInt();
+                    boolean flag = false;
+                    for (Product product : clientWithProduct.getProducts()) {
+                        if (product.getId() == id) {
+                            clientWithProduct.giveProductForRepair(serviceCentre, product);
+                            flag = true;
+                            break;
+                        }
+                    }
+                    if (!flag) {
+                        System.out.println("There is not Product with id = " + id);
+                    }
+                } else {
+                    System.out.println("Product is not exist, create him");
+                }
+                break;
+            case 2: // Buy Product
+                serviceCentre.showProducts();
+                System.out.println("Enter model of Product to buy");
+                String model = scanner.next();
+                for (Product product : serviceCentre.getProducts()) {
+                    if (model.equals(product.getModel())) {
+                        if (clientWithProduct.buyProduct(product)) {
+                            System.out.println("You buy: " + product.toString());
+                        }
+                        break;
+                    }
+                }
+            case 3:  // Take Product from Service
+                if (!clientWithProduct.getClientTickets().isEmpty()) {
+                    System.out.println("My tickets");
+                    clientWithProduct.showTickets();
+                    System.out.println("Enter Product id to repair");
+                    int id = scanner.nextInt();
+                    boolean flag = false;
+                    for (Product product : clientWithProduct.getProducts()) {
+                        if (product.getId() == id) {
+                            clientWithProduct.giveProductForRepair(serviceCentre, product);
+                            flag = true;
+                            break;
+                        }
+                    }
+                    if (!flag) {
+                        System.out.println("There is not Product with id = " + id);
+                    }
+                } else {
+                    System.out.println("Product is not exist, create him");
+                }
+                break;
+
+                if (clientWithProduct.takeProduct(serviceCentre.getAdministrator(),clientWithProduct.))
+
+
+
+
+
+
+
+
 
 
         }
