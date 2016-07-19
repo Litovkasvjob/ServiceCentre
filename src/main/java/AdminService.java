@@ -7,23 +7,22 @@ import java.util.*;
  */
 public class AdminService extends Human {
 
-    private ArrayList<Ticket> tickets;
-    private ArrayList<Specialist> specialists;
-
-    private ArrayList<Ticket> repairedTicket;
-
-
+    private ServiceCentre serviceCentre = ServiceCentre.getServiceCentre();
+    private Scanner scanner = new Scanner(System.in);
 
     private static int key = 0;
+    private static int idStatic = 1;
+    private int id = 0;
 
-    public AdminService(String name, int age, double cash) {
-        super(name, age, cash);
+    public AdminService(String name, int age, double salary) {
+        super(name, age, salary);
+        this.id = idStatic++;
     }
 
     public AdminService(String name) {
         super(name);
+        this.id = idStatic++;
     }
-
 
     /**
      * Take Product for repairing (cost of repairs = 10% of price of Product)
@@ -36,31 +35,71 @@ public class AdminService extends Human {
 
         if (clientWithProduct.getCash() < (product.getPrice() * 0.1)) {
             System.out.println("You have a little money to repair the " + product.getModel());
-            return null;
+            return null;  // TODO:  лучше здесь кинуть исключение
         }
-
         key += 1;
+
+        serviceCentre.addClientWithProduct(clientWithProduct);
+
         clientWithProduct.setCash(clientWithProduct.getCash() - (product.getPrice() * 0.1));
-        double repairedMoney = ServiceCentre.getServiceCentre().getMoney();   // money for repair
-        ServiceCentre.getServiceCentre().setMoney(repairedMoney + (product.getPrice() * 0.1));
-        Ticket ticket = new Ticket(key, product, new Date(), null, clientWithProduct);
+        double repairedMoney = serviceCentre.getMoney();   // earned money at all
+        serviceCentre.setMoney(repairedMoney + (product.getPrice() * 0.1));
+
+        Ticket ticket = serviceCentre.createTicket(key, product, new Date(), null, clientWithProduct);
+
         ClientTicket clientTicket = new ClientTicket(ticket);
-        tickets.add(clientTicket.getTicket());
+        serviceCentre.addTicket(ticket);
         return clientTicket;
     }
 
     /**
-     * Give Product to CliantWithProduct insead of clientTicket
+     * Give Product to ClientWithProduct instead of clientTicket
      * @param clientTicket
      * @return Product
      */
 
     public Product giveProductToClient(ClientTicket clientTicket) {
+        boolean flag = false;
+        for (Ticket ticket : serviceCentre.getTickets()) {
+            if (ticket == clientTicket.getTicket()) {
 
-        if (tickets.remove(clientTicket.getTicket())) {
-            repairedTicket.add(clientTicket.getTicket());
+            }
+        }
+          // есть ли билет в базе?
+        System.out.println("Revise Product, is it repair?"); //TODO: проверить отремонтирован ли продукт
+        if (clientTicket.getProduct().isFixed()) {
+            System.out.println("Product is fixed");
+            flag = true;
+        } else {
+            System.out.println("Product is not fixed");
+            System.out.println("Do you want to take it? yes or no");
+            String answer = scanner.next();
+            while (true){
+                if (answer.equals("yes")) {
+                    flag = true;
+                    break;
+                } else if (answer.equals("no")) {
+                    flag = false;
+                    break;
+                } else {
+                    System.out.println("You enter uncorrect symbols");
+                }
+            }
+        }
+
+        if (!flag) {
+            return null;
+        } else {
+
+        }
+        if (serviceCentre.removeTicket(clientTicket.getTicket())) {
+            serviceCentre.addRepairedTicket(clientTicket.getTicket());
+            if (clientTicket.getTicket().getClient().getClientTickets().isEmpty()) {
+                serviceCentre.removeClientWithProduct(clientTicket.getTicket().getClient());
+            }
         } else {
             System.out.println("There is not such product in service");
+            return null;
         }
         return clientTicket.getProduct();
     }
@@ -73,7 +112,8 @@ public class AdminService extends Human {
      */
 
     public boolean giveProductToSpecialist(Ticket ticket, Specialist specialist) {
-        return specialist.addTicket(ticket);
+        Ticket ticket1 = serviceCentre.getTicket(ticket);
+        return specialist.addTicket(ticket1);     //TODO:
     }
 
     /**
@@ -82,7 +122,7 @@ public class AdminService extends Human {
      * @return true if Admin receive Product (specialist gave Product to Admin)
      */
     public boolean takeProductFromSpecialist(Ticket ticket) {
-        for (Iterator iter = specialists.iterator(); iter.hasNext(); ) {
+        for (Iterator iter = serviceCentre.getSpecialists().iterator(); iter.hasNext(); ) {
             Specialist specialist = (Specialist) iter.next();
             for (Iterator it = specialist.getItems().iterator(); it.hasNext(); ) {
                 Ticket t = (Ticket) it.next();
@@ -103,7 +143,7 @@ public class AdminService extends Human {
     public boolean takeProductFromSpecialistStream(Ticket ticket) {
         final boolean[] f = {false};
 
-        specialists.stream().flatMap(t ->
+        serviceCentre.getSpecialists().stream().flatMap(t ->
                 t.getItems().stream().map(d -> {
 
                             if (d.getNumber() == ticket.getNumber()) {
@@ -123,9 +163,9 @@ public class AdminService extends Human {
 
     public void showAllClients() {
         Set<ClientWithProduct> clientWithProductSet = new HashSet<>();
-        for (Iterator it = tickets.iterator(); it.hasNext(); ) {
-            Ticket nextClient = (Ticket) it.next();
-            System.out.println( nextClient.getClient().toString());
+        for (Iterator it = serviceCentre.getClientWithProducts().iterator(); it.hasNext(); ) {
+            ClientWithProduct nextClient = (ClientWithProduct) it.next();
+            System.out.println( nextClient.toString());
         }
     }
 
@@ -135,7 +175,7 @@ public class AdminService extends Human {
 
     public void showReportAboutProduct() {
         Scanner scanner = new Scanner(System.in);
-        int range = 0;
+        long range = 0;
         boolean flag = true;
         while (flag) {
             System.out.println("Enter the range:\n1 - 1 day\n2 - 1 weeak\n3 - 1 month");
@@ -151,7 +191,7 @@ public class AdminService extends Human {
                         flag = false;
                         break;
                     case 3:
-                        range = 1000 * 60 * 60 * 24 * 7 * 30; // one month
+                        range = (long) (1000 * 60 * 60 * 24 * 30); // one month
                         flag = false;
                         break;
                     default:
@@ -164,7 +204,7 @@ public class AdminService extends Human {
 
         int amount = 0;
 
-        for (Iterator iterator = repairedTicket.iterator(); iterator.hasNext();) {
+        for (Iterator iterator = serviceCentre.getRepairedTickets().iterator(); iterator.hasNext();) {
             Ticket ticket = (Ticket) iterator.next();
             if (ticket.getPutTime().getTime() >= (new Date().getTime() - range)) {
                 amount++;
@@ -174,7 +214,14 @@ public class AdminService extends Human {
         System.out.println("Amount of repaired products is " + amount);
     }
 
+    public int getId() {
+        return id;
+    }
 
+    @Override
+    public String toString() {
+        return "Administrator {" + getId() + '}' + super.toString();
+    }
 }
 
 

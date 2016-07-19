@@ -9,23 +9,27 @@ import java.util.Date;
 public class Specialist extends Human {
 
     private ArrayList<Ticket> items;
-    //private Admin admin;
+    private static int idStatic = 1;
+    private int id = 0;
 
-        public Specialist(String name, int age) {
-        super(name, age, 0);
+
+    public Specialist(String name, int age, double salary) {
+        super(name, age, salary);
+        this.id = idStatic++;
     }
 
     public Specialist(String name) {
         super(name);
+        this.id = idStatic++;
     }
 
     public ArrayList<Ticket> getItems() {
         return items;
     }
 
-    public void setItems(ArrayList<Ticket> items) {
+    /*public void setItems(ArrayList<Ticket> items) {
         this.items = items;
-    }
+    }*/
 
     public boolean addTicket(Ticket ticket) {
         return  items.add(ticket);
@@ -53,5 +57,12 @@ public class Specialist extends Human {
         return false;
     }
 
+    public int getId() {
+        return id;
+    }
 
+    @Override
+    public String toString() {
+        return "Specialist {" + getId() + '}' + super.toString();
+    }
 }

@@ -7,22 +7,33 @@ import java.util.ArrayList;
  */
 public class ClientWithProduct extends Human implements Client {
 
-    private ArrayList<Product> products;
-    private ArrayList<ClientTicket> clientTickets;
+    private ArrayList<Product> products = new ArrayList<>();
+    private ArrayList<ClientTicket> clientTickets = new ArrayList<>();
+    private static int idStatic = 1;
+    private int id = 0;
+
 
 
     public ClientWithProduct(String name, int age, double cash) {
         super(name, age, cash);
-        products = new ArrayList<Product>();
+        this.id = idStatic++;
     }
 
     public ClientWithProduct(String name) {
         super(name);
-        products = new ArrayList<Product>();
+        this.id = idStatic++;
     }
 
     public ArrayList<Product> getProducts() {
         return products;
+    }
+
+    public ArrayList<ClientTicket> getClientTickets() {
+        return clientTickets;
+    }
+
+    public void setClientTickets(ArrayList<ClientTicket> clientTickets) {
+        this.clientTickets = clientTickets;
     }
 
     public void setProducts(ArrayList<Product> products) {
@@ -39,20 +50,45 @@ public class ClientWithProduct extends Human implements Client {
 
 
     @Override
-    public boolean giveProductForRepair(AdminService adminService, Product product) {
-        if (adminService.receiveProduct(product, this).equals(null)) {
-            return false;
+    public boolean giveProductForRepair(ServiceCentre serviceCentre, Product product) {
+        AdminService administrator;
+        if (!serviceCentre.getAdministrators().isEmpty()) {
+            administrator = serviceCentre.getAdministrator();
+
+            if (administrator.receiveProduct(product, this).equals(null)) {
+                return false;
+            }
+            if (clientTickets.add(administrator.receiveProduct(product, this))) {
+                return products.remove(product);
+            }
+        } else {
+            System.out.println("You can't give product because there is no one admin yet");
         }
 
-        if (clientTickets.add(adminService.receiveProduct(product, this))) {
-            return products.remove(product);
-        }
         return false;
     }
 
     @Override
-    public boolean takeProduct(AdminService adminService, ClientTicket clientTicket) {
-        return products.add(adminService.giveProductToClient(clientTicket));
+    public boolean takeProduct(ServiceCentre serviceCentre, ClientTicket clientTicket) {
+        AdminService administrator;
+        if (!serviceCentre.getAdministrators().isEmpty()) {
+            administrator = serviceCentre.getAdministrator();
+
+            if (administrator.giveProductToClient(clientTicket).equals(null)) {
+                return false;
+            }
+
+            Product product = administrator.giveProductToClient(clientTicket);
+            return products.add(product);
+            }
+         else {
+            System.out.println("You can't give product because there is no one admin yet");
+        }
+
+        return false;
+    }
+
+        return products.add(administrator.giveProductToClient(clientTicket));
     }
 
     @Override
@@ -66,8 +102,16 @@ public class ClientWithProduct extends Human implements Client {
         return false;
     }
 
+    public void showAllClientProduct() {
+        products.stream().forEach(e -> System.out.println(e.toString()));
+    }
+
+    public int getId() {
+        return id;
+    }
+
     @Override
     public String toString() {
-        return "ClientWithProduct" + super.toString();
+        return "ClientWithProduct: id = " + getId() + super.toString();
     }
 }

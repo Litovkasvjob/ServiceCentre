@@ -5,9 +5,9 @@
  */
 public interface Client {
 
-    public boolean giveProductForRepair(AdminService adminService, Product product);
+    public boolean giveProductForRepair(ServiceCentre serviceCentre, Product product);
 
-    public boolean takeProduct(AdminService adminService, ClientTicket clientTicket);
+    public boolean takeProduct(ServiceCentre serviceCentre, ClientTicket clientTicket);
 
     public boolean buyProduct(Product product);
 

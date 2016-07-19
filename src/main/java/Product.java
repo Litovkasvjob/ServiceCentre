@@ -12,12 +12,15 @@ public class Product {
     private String model;
     private double price;
     private boolean fixed;
+    private static int idStatic = 1;
+    private int id = 0;
 
 
     public Product(String model, double price) {
         this.model = model;
         this.price = price;
         this.fixed = false;
+        this.id = idStatic++;
     }
 
     public String getModel() {
@@ -44,12 +47,19 @@ public class Product {
         this.fixed = fixed;
     }
 
+    public int getId() {
+        return id;
+    }
+
     @Override
     public String toString() {
         return "Product{" +
                 "model='" + model + '\'' +
                 ", price=" + price +
                 ", fixed=" + fixed +
+                ", id=" + id +
                 '}';
     }
+
+
 }
