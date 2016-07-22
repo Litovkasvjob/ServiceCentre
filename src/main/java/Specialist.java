@@ -16,11 +16,13 @@ public class Specialist extends Human {
     public Specialist(String name, int age, double salary) {
         super(name, age, salary);
         this.id = idStatic++;
+        this.items = new ArrayList<>();
     }
 
     public Specialist(String name) {
         super(name);
         this.id = idStatic++;
+        this.items = new ArrayList<>();
     }
 
     public ArrayList<Ticket> getItems() {

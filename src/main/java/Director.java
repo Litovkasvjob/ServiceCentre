@@ -139,7 +139,6 @@ public class Director extends Human {
         String model = scanner.next();
         System.out.println("Enter price of Product");
         double price = scanner.nextDouble();
-        Product product = new Product(model, price);
-        return product;
+        return new Product(model, price);
     }
 }

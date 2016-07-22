@@ -36,4 +36,11 @@ public class ClientTicket {
     public void setTicket(Ticket ticket) {
         this.ticket = ticket;
     }
+
+    @Override
+    public String toString() {
+        return "ClientTicket{" +
+                "ticket=" + ticket +
+                '}';
+    }
 }

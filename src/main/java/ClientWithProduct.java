@@ -56,10 +56,11 @@ public class ClientWithProduct extends Human implements Client {
         if (!serviceCentre.getAdministrators().isEmpty()) {
             administrator = serviceCentre.getAdministrator();
 
-            if (administrator.receiveProduct(product, this).equals(null)) {
+            ClientTicket clientTicket = administrator.receiveProduct(product, this);
+            if (clientTicket.equals(null)) {
                 return false;
             }
-            if (clientTickets.add(administrator.receiveProduct(product, this))) {
+            if (clientTickets.add(clientTicket)) {
                 return products.remove(product);
             }
         } else {

@@ -209,11 +209,14 @@ public class Menu {
             System.out.println("1. Give Product to repair");
             System.out.println("2. Buy Product");
             System.out.println("3. Take Product from Service");
-            System.out.println("4. Back");
+            System.out.println("4. Set money");
+            System.out.println("5. Show Products");
+            System.out.println("6. Show Tickets");
+            System.out.println("7. Back");
 
             System.out.println("Input number of menu");
             int numType = scanner.nextInt();
-            if (numType == 4) break;
+            if (numType == 7) break;
             logicClient(numType , clientWithProduct);
         }
 
@@ -329,12 +332,19 @@ public class Menu {
                 System.out.println();
                 System.out.println("You pay " + valueOfSalary);
                 break;
+            case 8:
+                Product product = serviceCentre.getDirector().createProduct();
+                if (serviceCentre.getProducts().add(product)) {
+                    System.out.println("Product is add");
+                } else {
+                    System.out.println("Product is not add");
+                }
+                //serviceCentre.getProducts().add(product);
+                break;
             default:
                 System.out.println("You enter uncorrect symbol");
                 break;
-            case 8:
-                serviceCentre.getDirector().createProduct();
-                break;
+
         }
     }
 
@@ -359,6 +369,7 @@ public class Menu {
                     for (Product product : clientWithProduct.getProducts()) {
                         if (product.getId() == id) {
                             clientWithProduct.giveProductForRepair(serviceCentre, product);
+                            System.out.println("You give Product to repair");
                             flag = true;
                             break;
                         }
@@ -382,6 +393,7 @@ public class Menu {
                         break;
                     }
                 }
+                break;
             case 3:  // Take Product from Service
                 if (!clientWithProduct.getClientTickets().isEmpty()) {
                     System.out.println("My tickets");
@@ -391,7 +403,8 @@ public class Menu {
                     boolean flag = false;
                     for (ClientTicket clientTicket : clientWithProduct.getClientTickets()) {
                         if (clientTicket.getTicket().getNumber() == id) {
-                            clientWithProduct.takeProduct(serviceCentre, clientTicket);   //
+                            Product product = serviceCentre.getAdministrator().giveProductToClient(clientTicket);
+                            clientWithProduct.addProduct(product);   //
                             flag = true;
                             break;
                         }
@@ -402,7 +415,22 @@ public class Menu {
                 } else {
                     System.out.println("Product is not exist, create him");
                 }
-               ///
+                break;
+            case 4:
+                System.out.println("Make cash");
+                double cash = scanner.nextDouble();
+                clientWithProduct.setCash(cash);
+                break;
+            case 5:
+                clientWithProduct.getProducts().stream().forEach(e -> System.out.println(e.toString()));
+                break;
+            case 6:
+                clientWithProduct.getClientTickets().stream().forEach(t -> System.out.println(t.toString()));
+                break;
+            default:
+                System.out.println("You enter uncorrect symbol");
+                break;
+
 
         }
     }

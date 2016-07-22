@@ -90,6 +90,7 @@ public class AdminService extends Human {
                         // забрать продукт****************
                         for (Ticket ticket1 : serviceCentre.getTickets()) {
                             if (ticket1.getNumber() == clientTicket.getTicket().getNumber()) {
+
                                 takeProductFromSpecialist(ticket1);
                                 //serviceCentre.removeTicket(ticket1);
                                 //ticket1.getClient().addProduct(ticket1.getProduct());

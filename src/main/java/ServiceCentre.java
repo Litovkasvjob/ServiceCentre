@@ -1,6 +1,5 @@
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Random;
 
 /**
  * User: Litovka Sergii
@@ -29,6 +28,8 @@ public class ServiceCentre {
         this.specialists = new ArrayList<>();
         this.clientWithProducts = new ArrayList<>();
         this.tickets = new ArrayList<>();
+        this.products = new ArrayList<>();
+        this.repairedTickets = new ArrayList<>();
     }
 
     public static ServiceCentre getServiceCentre() {
@@ -154,6 +155,7 @@ public class ServiceCentre {
 
     public AdminService getAdministrator() {
         if (getAdministrators().isEmpty()) {
+
             return null;
         }
         int num = (int) (Math.random() * (getAdministrators().size())); // Random Administrator
