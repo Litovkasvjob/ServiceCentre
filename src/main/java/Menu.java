@@ -386,12 +386,12 @@ public class Menu {
                 if (!clientWithProduct.getClientTickets().isEmpty()) {
                     System.out.println("My tickets");
                     clientWithProduct.showTickets();
-                    System.out.println("Enter Product id to repair");
+                    System.out.println("Enter Ticket id to take Product from repair");
                     int id = scanner.nextInt();
                     boolean flag = false;
-                    for (Product product : clientWithProduct.getProducts()) {
-                        if (product.getId() == id) {
-                            clientWithProduct.giveProductForRepair(serviceCentre, product);
+                    for (ClientTicket clientTicket : clientWithProduct.getClientTickets()) {
+                        if (clientTicket.getTicket().getNumber() == id) {
+                            clientWithProduct.takeProduct(serviceCentre, clientTicket);   //
                             flag = true;
                             break;
                         }
@@ -402,18 +402,7 @@ public class Menu {
                 } else {
                     System.out.println("Product is not exist, create him");
                 }
-                break;
-
-                if (clientWithProduct.takeProduct(serviceCentre.getAdministrator(),clientWithProduct.))
-
-
-
-
-
-
-
-
-
+               ///
 
         }
     }

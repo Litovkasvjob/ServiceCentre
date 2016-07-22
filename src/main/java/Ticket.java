@@ -60,4 +60,15 @@ public class Ticket {
     public void setClient(ClientWithProduct client) {
         this.client = client;
     }
+
+    @Override
+    public String toString() {
+        return "Ticket{" +
+                "number=" + number +
+                ", product=" + product +
+                ", putTime=" + putTime +
+                ", getTime=" + getTime +
+                ", client=" + client +
+                '}';
+    }
 }

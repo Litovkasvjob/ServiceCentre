@@ -26,6 +26,7 @@ public class AdminService extends Human {
 
     /**
      * Take Product for repairing (cost of repairs = 10% of price of Product)
+     *
      * @param product
      * @param clientWithProduct
      * @return clientTicket for clientWithProduct instead of Product
@@ -54,6 +55,7 @@ public class AdminService extends Human {
 
     /**
      * Give Product to ClientWithProduct instead of clientTicket
+     *
      * @param clientTicket
      * @return Product
      */
@@ -62,35 +64,49 @@ public class AdminService extends Human {
         boolean flag = false;
         for (Ticket ticket : serviceCentre.getTickets()) {
             if (ticket == clientTicket.getTicket()) {
-
-            }
-        }
-          // есть ли билет в базе?
-        System.out.println("Revise Product, is it repair?"); //TODO: проверить отремонтирован ли продукт
-        if (clientTicket.getProduct().isFixed()) {
-            System.out.println("Product is fixed");
-            flag = true;
-        } else {
-            System.out.println("Product is not fixed");
-            System.out.println("Do you want to take it? yes or no");
-            String answer = scanner.next();
-            while (true){
-                if (answer.equals("yes")) {
+                System.out.println("Revise Product, is it repair?");
+                if (clientTicket.getProduct().isFixed()) {
+                    System.out.println("Product is fixed");
                     flag = true;
-                    break;
-                } else if (answer.equals("no")) {
-                    flag = false;
-                    break;
                 } else {
-                    System.out.println("You enter uncorrect symbols");
+                    System.out.println("Product is not fixed");
+                    System.out.println("Do you want to take it? yes or no");
+                    String answer = scanner.next();
+                    while (true) {
+                        if (answer.equals("yes")) {
+                            flag = true;
+                            break;
+                        } else if (answer.equals("no")) {
+                            flag = false;
+                            break;
+                        } else {
+                            System.out.println("You enter uncorrect symbols");
+                        }
+                    }
+                    if (!flag) {
+                        System.out.println("Product in service");
+                        return null;
+                    } else {
+                        // забрать продукт****************
+                        for (Ticket ticket1 : serviceCentre.getTickets()) {
+                            if (ticket1.getNumber() == clientTicket.getTicket().getNumber()) {
+                                takeProductFromSpecialist(ticket1);
+                                //serviceCentre.removeTicket(ticket1);
+                                //ticket1.getClient().addProduct(ticket1.getProduct());
+                                for (Iterator iter = ticket1.getClient().getClientTickets().iterator(); iter.hasNext(); ) {
+                                    ClientTicket cl = (ClientTicket) iter.next();
+                                    if (cl.equals(clientTicket)) {
+                                        ticket1.getClient().getClientTickets().remove(cl);
+                                        break;
+                                    }
+                                }
+                                break;
+                            }
+                        }
+                    }
                 }
             }
-        }
-
-        if (!flag) {
-            return null;
-        } else {
-
+            break;
         }
         if (serviceCentre.removeTicket(clientTicket.getTicket())) {
             serviceCentre.addRepairedTicket(clientTicket.getTicket());
@@ -106,6 +122,7 @@ public class AdminService extends Human {
 
     /**
      * Admin gives Product to specialist
+     *
      * @param ticket
      * @param specialist
      * @return true if specialist add ticket (Product) to yourself
@@ -118,6 +135,7 @@ public class AdminService extends Human {
 
     /**
      * Take Product on the ticket
+     *
      * @param ticket
      * @return true if Admin receive Product (specialist gave Product to Admin)
      */
@@ -136,6 +154,7 @@ public class AdminService extends Human {
 
     /**
      * Take Product on the ticket (used Stream)
+     *
      * @param ticket
      * @return true if Admin receive Product (specialist gave Product to Admin)
      */
@@ -144,15 +163,15 @@ public class AdminService extends Human {
         final boolean[] f = {false};
 
         serviceCentre.getSpecialists().stream().flatMap(t ->
-                t.getItems().stream().map(d -> {
+                        t.getItems().stream().map(d -> {
 
-                            if (d.getNumber() == ticket.getNumber()) {
-                                f[0] = t.removeTicket(ticket);
-                            }
-                            return f[0];
+                                    if (d.getNumber() == ticket.getNumber()) {
+                                        f[0] = t.removeTicket(ticket);
+                                    }
+                                    return f[0];
 
-                        }
-                )
+                                }
+                        )
         );
         return f[0];
     }
@@ -165,7 +184,7 @@ public class AdminService extends Human {
         Set<ClientWithProduct> clientWithProductSet = new HashSet<>();
         for (Iterator it = serviceCentre.getClientWithProducts().iterator(); it.hasNext(); ) {
             ClientWithProduct nextClient = (ClientWithProduct) it.next();
-            System.out.println( nextClient.toString());
+            System.out.println(nextClient.toString());
         }
     }
 
@@ -204,7 +223,7 @@ public class AdminService extends Human {
 
         int amount = 0;
 
-        for (Iterator iterator = serviceCentre.getRepairedTickets().iterator(); iterator.hasNext();) {
+        for (Iterator iterator = serviceCentre.getRepairedTickets().iterator(); iterator.hasNext(); ) {
             Ticket ticket = (Ticket) iterator.next();
             if (ticket.getPutTime().getTime() >= (new Date().getTime() - range)) {
                 amount++;

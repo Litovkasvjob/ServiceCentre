@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  * User: Litovka Serg
@@ -74,22 +75,34 @@ public class ClientWithProduct extends Human implements Client {
         if (!serviceCentre.getAdministrators().isEmpty()) {
             administrator = serviceCentre.getAdministrator();
 
-            if (administrator.giveProductToClient(clientTicket).equals(null)) {
+            if (serviceCentre.getTickets().equals(null)) {
                 return false;
             }
 
-            Product product = administrator.giveProductToClient(clientTicket);
-            return products.add(product);
+            for (Ticket ticket : serviceCentre.getTickets()) {
+                if (ticket.getNumber() == clientTicket.getTicket().getNumber()) {
+                    administrator.takeProductFromSpecialist(ticket);
+                    serviceCentre.removeTicket(ticket);
+                    //вернуть продукт
+                    ticket.getClient().addProduct(ticket.getProduct());
+                    for (Iterator iter = ticket.getClient().getClientTickets().iterator(); iter.hasNext(); ) {
+                        ClientTicket cl = (ClientTicket) iter.next();
+                        if (cl.equals(clientTicket)) {
+                            ticket.getClient().getClientTickets().remove(cl);
+                            break;
+                        }
+                    }
+
+                }
             }
-         else {
+        } else {
             System.out.println("You can't give product because there is no one admin yet");
         }
 
-        return false;
+        return true;
     }
 
-        return products.add(administrator.giveProductToClient(clientTicket));
-    }
+
 
     @Override
     public boolean buyProduct(Product product) {
@@ -100,6 +113,10 @@ public class ClientWithProduct extends Human implements Client {
             System.out.println("You have a little money");
         }
         return false;
+    }
+
+    public void showTickets() {
+        getClientTickets().stream().forEach(e -> System.out.println(e.toString()));
     }
 
     public void showAllClientProduct() {
