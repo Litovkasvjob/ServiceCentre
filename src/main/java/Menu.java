@@ -112,7 +112,20 @@ public class Menu {
             }
             case 2: {
                 if (!serviceCentre.getAdministrators().isEmpty()) {
-                    showAdminMenu();
+                    System.out.println("Enter you id");
+                    int id = scanner.nextInt();
+
+                    boolean flag = false;
+                    for (AdminService administrator : serviceCentre.getAdministrators()) {
+                        if (administrator.getId() == id) {
+                            showAdminMenu(administrator);
+                            flag = true;
+                            break;
+                        }
+                    }
+                    if (!flag) {
+                        System.out.println("There is not Administrator with id = " + id);
+                    }
                 } else {
                     System.out.println("Administrator is not exist, director can hire him");
                 }
@@ -181,7 +194,7 @@ public class Menu {
 
     }
 
-    public void showAdminMenu() {
+    public void showAdminMenu(AdminService administrator) {
 
         while (true) {
             System.out.println("1. Show all Clients");
@@ -195,7 +208,7 @@ public class Menu {
             System.out.println("Input number of menu");
             int num = scanner.nextInt();
             if (num == 7) break;
-            logicAdmin(num);
+            logicAdmin(num , administrator);
         }
     }
 
@@ -286,6 +299,7 @@ public class Menu {
                             System.out.println("There is not admin with this id");
                         }
                     }
+                    break;
 
                 } else if (number2 == 2) {
                     System.out.println("Enter id remove");
@@ -348,12 +362,57 @@ public class Menu {
         }
     }
 
-    public void logicAdmin(int num) {
+    public void logicAdmin(int num, AdminService administrator) {
         switch (num) {
             case 1:  // Show all Clients
-                //serviceCentre.getAdministrators().
+                administrator.showAllClients();
+                //serviceCentre.getClientWithProducts().stream().forEach(e -> e.toString());
+                break;
+            case 2:  //Show report about Product  (quantity of repaired equipment per day, per week, per month)
+                administrator.showReportAboutProduct();
+                break;
+            case 3:  // Take Product to repair:
+                System.out.println("Enter id of Client");
+                if (!getClientWithProducts().isEmpty()) {
+                    getClientWithProducts().stream().forEach(e -> e.toString());
+                    int id = scanner.nextInt();
+                    for (ClientWithProduct clientWithProduct : clientWithProducts) {
+                        if (clientWithProduct.getId() == id) {
+                            System.out.println("Enter id of Product to repair");
+                            clientWithProduct.getProducts().stream().forEach(e -> System.out.println(e.toString()));
+                            int idp = scanner.nextInt();
+                            for (Product product : clientWithProduct.getProducts()) {
+                                if (product.getId() == idp) {
+                                    administrator.receiveProduct(product, clientWithProduct);
+                                } else {
+                                    System.out.println("You enter uncorrect id");
+                                }
+                                break;
+                            }
+                        } else {
+                            System.out.println("There is not Client with this id");
+                        }
+                    }
+
+                } else {
+                    System.out.println("There is not Client yet");
+                }
+                break;
+            case 4: //  Give Product to Client
+
+            case 5: // Take Product from Specialist
+
+            case 6: // Give Product to Specialist
+                if (!serviceCentre.getSpecialists().isEmpty()) {
+                    administrator.giveAllProductsToSpecialist();
+                } else {
+                    System.out.println("There is not specialist yet");
+                }
+                break;
+            case 7:
 
         }
+
 
     }
 

@@ -134,6 +134,17 @@ public class AdminService extends Human {
         return specialist.addTicket(ticket1);     //TODO:
     }
 
+    public void giveAllProductsToSpecialist() {
+        if (!serviceCentre.getTickets().isEmpty()) {
+            for (Ticket ticket : serviceCentre.getTickets()) {
+                ticket.getProduct().setFixed(true);
+            }
+        } else {
+            System.out.println("There are not Products to repair");
+        }
+
+    }
+
     /**
      * Take Product on the ticket
      *
@@ -182,7 +193,7 @@ public class AdminService extends Human {
      */
 
     public void showAllClients() {
-        Set<ClientWithProduct> clientWithProductSet = new HashSet<>();
+        //Set<ClientWithProduct> clientWithProductSet = new HashSet<>();
         for (Iterator it = serviceCentre.getClientWithProducts().iterator(); it.hasNext(); ) {
             ClientWithProduct nextClient = (ClientWithProduct) it.next();
             System.out.println(nextClient.toString());
