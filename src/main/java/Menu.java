@@ -132,8 +132,22 @@ public class Menu {
                 break;
             }
             case 3: {
+
                 if (!serviceCentre.getSpecialists().isEmpty()) {
-                    showSpecialistMenu();
+                    System.out.println("Enter your id");
+                    int id = scanner.nextInt();
+
+                    boolean flag = false;
+                    for (Specialist specialist : serviceCentre.getSpecialists()) {
+                        if (specialist.getId() == id) {
+                            showSpecialistMenu(specialist);
+                            flag = true;
+                            break;
+                        }
+                    }
+                    if (!flag) {
+                        System.out.println("There is not Specialist with id = " + id);
+                    }
                 } else {
                     System.out.println("Specialist is not exist, director can to hire him");
                 }
@@ -208,13 +222,21 @@ public class Menu {
             System.out.println("Input number of menu");
             int num = scanner.nextInt();
             if (num == 7) break;
-            logicAdmin(num , administrator);
+            logicAdmin(num, administrator);
         }
     }
 
-    public void showSpecialistMenu() {
-        System.out.println("1. Repair Product");
-        System.out.println("2. Return Product to Admin");
+    public void showSpecialistMenu(Specialist specialist) {
+        while (true) {
+            System.out.println("1. Repair Product");
+            System.out.println("2. Return Product to Admin");
+            System.out.println("3. Back");
+
+            System.out.println("Input number of menu");
+            int numType = scanner.nextInt();
+            if (numType == 3) break;
+            logicSpecialist(numType, specialist);
+        }
     }
 
     public void showClientMenu(ClientWithProduct clientWithProduct) { // id to identify Client
@@ -230,7 +252,7 @@ public class Menu {
             System.out.println("Input number of menu");
             int numType = scanner.nextInt();
             if (numType == 7) break;
-            logicClient(numType , clientWithProduct);
+            logicClient(numType, clientWithProduct);
         }
 
     }
@@ -383,7 +405,10 @@ public class Menu {
                             int idp = scanner.nextInt();
                             for (Product product : clientWithProduct.getProducts()) {
                                 if (product.getId() == idp) {
-                                    administrator.receiveProduct(product, clientWithProduct);
+                                    ClientTicket clientTicket = administrator.receiveProduct(product, clientWithProduct);
+                                    if (clientWithProduct.getClientTickets().add(clientTicket)) {
+                                        clientWithProduct.getProducts().remove(product);
+                                    }
                                 } else {
                                     System.out.println("You enter uncorrect id");
                                 }
@@ -399,18 +424,78 @@ public class Menu {
                 }
                 break;
             case 4: //  Give Product to Client
+                System.out.println("Enter id of Product to give to Client");
+                serviceCentre.getTickets().stream().forEach(e -> System.out.println(e.getProduct().toString()));
+                int idP = scanner.nextInt();
+                for (Iterator iterProduct = serviceCentre.getTickets().iterator(); iterProduct.hasNext(); ) {
+                    Ticket ticket = (Ticket) iterProduct.next();
+                    if (ticket.getProduct().getId() == idP) {
+                        for (ClientWithProduct clientWithProduct : serviceCentre.getClientWithProducts()) {
+                            for (ClientTicket clientTicket : clientWithProduct.getClientTickets()) {
+                                if (clientTicket.getTicket().getProduct().getId() == idP) {
+                                    administrator.giveProductToClient(clientTicket);
+                                    break;
+                                }
+                            }
+                        }
+
+                    }
+
+
+                }
+
 
             case 5: // Take Product from Specialist
+                System.out.println("Enter id of Product to take from Specialist");
+                serviceCentre.getSpecialists().stream().flatMap(e -> e.getItems().stream()).forEach(e ->
+                        System.out.println(e.getProduct().toString()));
+                int idS = scanner.nextInt();
+                for (Iterator iterSpecialist = serviceCentre.getSpecialists().iterator(); iterSpecialist.hasNext(); ) {
+                    Specialist specialist = (Specialist) iterSpecialist.next();
+                    for (Iterator iterProduct = specialist.getItems().iterator(); iterProduct.hasNext(); ) {
+                        Ticket ticket = (Ticket) iterProduct.next();
+                        if (ticket.getProduct().getId() == idS) {
+                            specialist.repairProduct(ticket);
+                            specialist.removeTicket(ticket);
+                            serviceCentre.setRepairedTicket(ticket);
+                            break;
+                        }
+                    }
+                }
 
+
+                break;
             case 6: // Give Product to Specialist
+                System.out.println("Enter id of Specialist");
                 if (!serviceCentre.getSpecialists().isEmpty()) {
-                    administrator.giveAllProductsToSpecialist();
+                    serviceCentre.getSpecialists().stream().forEach(e -> e.toString());
+                    int id = scanner.nextInt();
+                    for (Specialist specialist : serviceCentre.getSpecialists()) {
+                        if (specialist.getId() == id) {
+                            System.out.println("Enter id of Product to repair");
+                            if (!serviceCentre.getTickets().isEmpty()) {
+                                serviceCentre.getTickets().stream().map(Ticket::getProduct)
+                                        .forEach(e -> System.out.println(e.toString()));
+                                int idp = scanner.nextInt();
+                                for (Ticket ticket : serviceCentre.getTickets()) {
+                                    if (ticket.getProduct().getId() == idp) {
+                                        specialist.addTicket(ticket);
+                                        break;
+                                    }
+                                }
+                            } else {
+                                System.out.println("There are not Products to repair");
+                            }
+                        }
+                    }
+
                 } else {
-                    System.out.println("There is not specialist yet");
+                    System.out.println("There is not Specialist yet");
                 }
                 break;
-            case 7:
-
+            default:
+                System.out.println("You enter uncorrect symbol");
+                break;
         }
 
 
@@ -491,6 +576,44 @@ public class Menu {
                 break;
 
 
+        }
+    }
+
+    public void logicSpecialist(int numType, Specialist specialist) {
+
+        switch (numType) {
+            case 1:        // Repair Product   нет правильно
+                System.out.println("Enter id of Product to repair");
+                specialist.getItems().stream().forEach(e -> System.out.println(e.getProduct().toString()));
+                int idP = scanner.nextInt();
+                for (Iterator iterProduct =  specialist.getItems().iterator(); iterProduct.hasNext(); ) {
+                    Ticket ticket = (Ticket) iterProduct.next();
+                    if (ticket.getProduct().getId() == idP) {
+                        specialist.repairProduct(ticket);
+                        break;
+
+                    }
+                }
+                break;
+            case 2:      //Return Product to Admin
+                System.out.println("Enter id of Product to return to Admin");
+                specialist.getItems().stream().forEach(e ->
+                        System.out.println(e.getProduct().toString()));
+                int idS = scanner.nextInt();
+               for (Iterator iterProduct = specialist.getItems().iterator(); iterProduct.hasNext(); ) {
+                        Ticket ticket = (Ticket) iterProduct.next();
+                        if (ticket.getProduct().getId() == idS) {
+                            if (ticket.getProduct().isFixed() == true) {
+                                serviceCentre.setRepairedTicket(ticket);
+                            }
+                            specialist.removeTicket(ticket);
+                            break;
+                        }
+                    }
+                break;
+            default:
+                System.out.println("You enter uncorrect symbol");
+                break;
         }
     }
 

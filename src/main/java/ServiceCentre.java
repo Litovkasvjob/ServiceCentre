@@ -13,7 +13,7 @@ public class ServiceCentre {
     private double money = 0;
     private ArrayList<AdminService> administrators;
     private ArrayList<Specialist> specialists;
-    private ArrayList<ClientWithProduct> waitingProductToRepair;     //
+
     private ArrayList<ClientWithProduct> clientWithProducts;
     private ArrayList<Ticket> tickets;
     private ArrayList<Ticket> repairedTickets;
@@ -220,7 +220,7 @@ public class ServiceCentre {
         return repairedTickets;
     }
 
-    public void setRepairedTickets(ArrayList<Ticket> repairedTickets) {
-        this.repairedTickets = repairedTickets;
+    public void setRepairedTicket(Ticket repairedTickets) {
+        this.repairedTickets.add(repairedTickets);
     }
 }
