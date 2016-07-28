@@ -40,7 +40,7 @@ public class AdminService extends Human {
         }
         key += 1;
 
-        serviceCentre.addClientWithProduct(clientWithProduct);
+        serviceCentre.addClientWithProduct(clientWithProduct);     // HashSet
 
         clientWithProduct.setCash(clientWithProduct.getCash() - (product.getPrice() * 0.1));
         double repairedMoney = serviceCentre.getMoney();   // earned money at all
@@ -62,8 +62,8 @@ public class AdminService extends Human {
 
     public Product giveProductToClient(ClientTicket clientTicket) {
         boolean flag = false;
-        for (Ticket ticket : serviceCentre.getTickets()) {
-            if (ticket == clientTicket.getTicket()) {
+        //for (Ticket ticket : serviceCentre.getTickets()) {
+        //    if (ticket == clientTicket.getTicket()) {
                 System.out.println("Revise Product, is it repair?");
                 if (clientTicket.getProduct().isFixed()) {
                     System.out.println("Product is fixed");
@@ -106,9 +106,9 @@ public class AdminService extends Human {
                         }
                     }
                 }
-            }
-            break;
-        }
+            //}
+            //break;
+        //}
         if (serviceCentre.removeTicket(clientTicket.getTicket())) {
             serviceCentre.addRepairedTicket(clientTicket.getTicket());
             if (clientTicket.getTicket().getClient().getClientTickets().isEmpty()) {

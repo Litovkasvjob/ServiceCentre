@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 
 /**
  * User: Litovka Sergii
@@ -14,7 +15,7 @@ public class ServiceCentre {
     private ArrayList<AdminService> administrators;
     private ArrayList<Specialist> specialists;
 
-    private ArrayList<ClientWithProduct> clientWithProducts;
+    private HashSet<ClientWithProduct> clientWithProducts;
     private ArrayList<Ticket> tickets;
     private ArrayList<Ticket> repairedTickets;
     private ArrayList<Product> products; //Product to buy
@@ -26,7 +27,7 @@ public class ServiceCentre {
     private ServiceCentre() {
         this.administrators = new ArrayList<>();
         this.specialists = new ArrayList<>();
-        this.clientWithProducts = new ArrayList<>();
+        this.clientWithProducts = new HashSet<>();
         this.tickets = new ArrayList<>();
         this.products = new ArrayList<>();
         this.repairedTickets = new ArrayList<>();
@@ -84,11 +85,11 @@ public class ServiceCentre {
         this.specialists = specialists;
     }
 
-    public ArrayList<ClientWithProduct> getClientWithProducts() {
+    public HashSet<ClientWithProduct> getClientWithProducts() {
         return clientWithProducts;
     }
 
-    public void setClientWithProducts(ArrayList<ClientWithProduct> clientWithProducts) {
+    public void setClientWithProducts(HashSet<ClientWithProduct> clientWithProducts) {
         this.clientWithProducts = clientWithProducts;
     }
 

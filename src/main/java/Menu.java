@@ -396,24 +396,29 @@ public class Menu {
             case 3:  // Take Product to repair:
                 System.out.println("Enter id of Client");
                 if (!getClientWithProducts().isEmpty()) {
-                    getClientWithProducts().stream().forEach(e -> e.toString());
+                    getClientWithProducts().stream().forEach(e -> System.out.println(e.toString()));
                     int id = scanner.nextInt();
                     for (ClientWithProduct clientWithProduct : clientWithProducts) {
                         if (clientWithProduct.getId() == id) {
                             System.out.println("Enter id of Product to repair");
-                            clientWithProduct.getProducts().stream().forEach(e -> System.out.println(e.toString()));
-                            int idp = scanner.nextInt();
-                            for (Product product : clientWithProduct.getProducts()) {
-                                if (product.getId() == idp) {
-                                    ClientTicket clientTicket = administrator.receiveProduct(product, clientWithProduct);
-                                    if (clientWithProduct.getClientTickets().add(clientTicket)) {
-                                        clientWithProduct.getProducts().remove(product);
+                            if (!clientWithProduct.getProducts().isEmpty()) {
+                                clientWithProduct.getProducts().stream().forEach(e -> System.out.println(e.toString()));
+                                int idp = scanner.nextInt();
+                                for (Product product : clientWithProduct.getProducts()) {
+                                    if (product.getId() == idp) {
+                                        ClientTicket clientTicket = administrator.receiveProduct(product, clientWithProduct);
+                                        if (clientWithProduct.getClientTickets().add(clientTicket)) {
+                                            clientWithProduct.getProducts().remove(product);
+                                        }
+                                    } else {
+                                        System.out.println("You enter uncorrect id");
                                     }
-                                } else {
-                                    System.out.println("You enter uncorrect id");
+                                    break;
                                 }
-                                break;
+                            } else {
+                                System.out.println("There is not Product in this Client ");
                             }
+
                         } else {
                             System.out.println("There is not Client with this id");
                         }
@@ -447,6 +452,7 @@ public class Menu {
 
             case 5: // Take Product from Specialist
                 System.out.println("Enter id of Product to take from Specialist");
+                // TODO: проверка если пусто нужна здесь
                 serviceCentre.getSpecialists().stream().flatMap(e -> e.getItems().stream()).forEach(e ->
                         System.out.println(e.getProduct().toString()));
                 int idS = scanner.nextInt();
@@ -468,7 +474,7 @@ public class Menu {
             case 6: // Give Product to Specialist
                 System.out.println("Enter id of Specialist");
                 if (!serviceCentre.getSpecialists().isEmpty()) {
-                    serviceCentre.getSpecialists().stream().forEach(e -> e.toString());
+                    serviceCentre.getSpecialists().stream().forEach(e -> System.out.println(e.toString()));
                     int id = scanner.nextInt();
                     for (Specialist specialist : serviceCentre.getSpecialists()) {
                         if (specialist.getId() == id) {
@@ -512,9 +518,9 @@ public class Menu {
                     boolean flag = false;
                     for (Product product : clientWithProduct.getProducts()) {
                         if (product.getId() == id) {
-                            clientWithProduct.giveProductForRepair(serviceCentre, product);
+                            if (clientWithProduct.giveProductForRepair(serviceCentre, product)){
                             System.out.println("You give Product to repair");
-                            flag = true;
+                            flag = true; }
                             break;
                         }
                     }
@@ -566,10 +572,20 @@ public class Menu {
                 clientWithProduct.setCash(cash);
                 break;
             case 5:
-                clientWithProduct.getProducts().stream().forEach(e -> System.out.println(e.toString()));
+                if (!clientWithProduct.getProducts().isEmpty()) {
+                    clientWithProduct.getProducts().stream().forEach(e -> System.out.println(e.toString()));
+                    break;
+                } else {
+                    System.out.println("There is no Product");
+                }
                 break;
             case 6:
-                clientWithProduct.getClientTickets().stream().forEach(t -> System.out.println(t.toString()));
+                if (!clientWithProduct.getClientTickets().isEmpty()) {
+                    clientWithProduct.getClientTickets().stream().forEach(t -> System.out.println(t.toString()));
+                    break;
+                } else {
+                    System.out.println("There is no tickets");
+                }
                 break;
             default:
                 System.out.println("You enter uncorrect symbol");
