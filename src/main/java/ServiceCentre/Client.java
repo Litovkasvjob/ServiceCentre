@@ -1,3 +1,5 @@
+package ServiceCentre;
+
 /**
  * User: Litovka Serg
  * Date: 19.06.2016

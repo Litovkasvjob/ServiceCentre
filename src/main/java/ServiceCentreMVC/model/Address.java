@@ -1,3 +1,5 @@
+package ServiceCentreMVC.model;
+
 /**
  * User: Litovka Serg
  * Date: 26.06.2016
@@ -44,7 +46,7 @@ public class Address {
 
     @Override
     public String toString() {
-        return "Address{" +
+        return "ServiceCentre.Address{" +
                 "city='" + city + '\'' +
                 ", street='" + street + '\'' +
                 ", house=" + house +

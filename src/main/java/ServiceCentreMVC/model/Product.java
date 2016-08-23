@@ -1,4 +1,4 @@
-import java.util.Date;
+package ServiceCentreMVC.model;
 
 /**
  * User: Litovka Serg
@@ -53,8 +53,7 @@ public class Product {
 
     @Override
     public String toString() {
-        return "Product{" +
-                "model='" + model + '\'' +
+        return  "Product {model='" + model + '\'' +
                 ", price=" + price +
                 ", fixed=" + fixed +
                 ", id=" + id +

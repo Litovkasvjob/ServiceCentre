@@ -1,3 +1,5 @@
+package ServiceCentre;
+
 import java.util.Date;
 import java.util.Iterator;
 import java.util.Scanner;
@@ -13,7 +15,7 @@ public class Director extends Human {
     private ServiceCentre serviceCentre = ServiceCentre.getServiceCentre();
     private Scanner scanner = new Scanner(System.in);
 
-    public Director(String name, int age, double salary) {     // TODO: Director as a Singleton ?
+    public Director(String name, int age, double salary) {     // TODO: ServiceCentre.Director as a Singleton ?
         super(name, age, salary);
     }
 
@@ -135,9 +137,9 @@ public class Director extends Human {
     }
 
     public Product createProduct() {
-        System.out.println("Enter model of Product");
+        System.out.println("Enter ServiceCentreMVC.view.model of ServiceCentre.Product");
         String model = scanner.next();
-        System.out.println("Enter price of Product");
+        System.out.println("Enter price of ServiceCentre.Product");
         double price = scanner.nextDouble();
         return new Product(model, price);
     }

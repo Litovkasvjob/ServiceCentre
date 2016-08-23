@@ -1,4 +1,4 @@
-# ServiceCentre
+# ServiceCentre.ServiceCentre
  	Написать приложение для управления сервисным центром 
  	
  	

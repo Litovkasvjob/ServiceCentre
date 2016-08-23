@@ -1,3 +1,5 @@
+package ServiceCentre;
+
 import java.util.*;
 
 /**
@@ -25,11 +27,11 @@ public class AdminService extends Human {
     }
 
     /**
-     * Take Product for repairing (cost of repairs = 10% of price of Product)
+     * Take ServiceCentre.Product for repairing (cost of repairs = 10% of price of ServiceCentre.Product)
      *
      * @param product
      * @param clientWithProduct
-     * @return clientTicket for clientWithProduct instead of Product
+     * @return clientTicket for clientWithProduct instead of ServiceCentre.Product
      */
 
     public ClientTicket receiveProduct(Product product, ClientWithProduct clientWithProduct) {
@@ -54,63 +56,49 @@ public class AdminService extends Human {
     }
 
     /**
-     * Give Product to ClientWithProduct instead of clientTicket
+     * Give ServiceCentre.Product to ServiceCentre.ClientWithProduct instead of clientTicket
      *
      * @param clientTicket
-     * @return Product
+     * @return ServiceCentre.Product
      */
 
     public Product giveProductToClient(ClientTicket clientTicket) {
         boolean flag = false;
-        //for (Ticket ticket : serviceCentre.getTickets()) {
+        //for (ServiceCentre.Ticket ticket : serviceCentre.getTickets()) {
         //    if (ticket == clientTicket.getTicket()) {
-                System.out.println("Revise Product, is it repair?");
-                if (clientTicket.getProduct().isFixed()) {
-                    System.out.println("Product is fixed");
-                    flag = true;
-                } else {
-                    System.out.println("Product is not fixed");
-                    System.out.println("Do you want to take it? yes or no");
-                    String answer = scanner.next();
-                    while (true) {
-                        if (answer.equals("yes")) {
-                            flag = true;
-                            break;
-                        } else if (answer.equals("no")) {
-                            flag = false;
-                            break;
-                        } else {
-                            System.out.println("You enter uncorrect symbols");
-                        }
-                    }
-                    if (!flag) {
-                        System.out.println("Product in service");
-                        return null;
-                    } else {
-                        // забрать продукт****************
-                        for (Ticket ticket1 : serviceCentre.getTickets()) {
-                            if (ticket1.getNumber() == clientTicket.getTicket().getNumber()) {
 
-                                takeProductFromSpecialist(ticket1);
-                                //serviceCentre.removeTicket(ticket1);
-                                //ticket1.getClient().addProduct(ticket1.getProduct());
-                                for (Iterator iter = ticket1.getClient().getClientTickets().iterator(); iter.hasNext(); ) {
-                                    ClientTicket cl = (ClientTicket) iter.next();
-                                    if (cl.equals(clientTicket)) {
-                                        ticket1.getClient().getClientTickets().remove(cl);
-                                        break;
-                                    }
-                                }
-                                break;
-                            }
-                        }
-                    }
+        if (clientTicket.getProduct().isFixed()) {
+            System.out.println("ServiceCentre.Product is fixed");
+            flag = true;
+        } else {
+            System.out.println("ServiceCentre.Product is not fixed");
+            System.out.println("Do you want to take it? yes or no");
+            String answer = scanner.next();
+            while (true) {
+                if (answer.equals("yes")) {
+                    flag = true;
+                    break;
+                } else if (answer.equals("no")) {
+                    flag = false;
+                    break;
+                } else {
+                    System.out.println("You enter uncorrect symbols");
                 }
-            //}
-            //break;
-        //}
+            }
+            if (!flag) {
+                System.out.println("ServiceCentre.Product in service");
+                return null;
+            } else {
+                // забрать продукт****************
+                takeProductFromSpecialist(clientTicket.getTicket());
+            }
+        }
+           // ????
         if (serviceCentre.removeTicket(clientTicket.getTicket())) {
-            serviceCentre.addRepairedTicket(clientTicket.getTicket());
+            if (clientTicket.getProduct().isFixed()) {
+                serviceCentre.addRepairedTicket(clientTicket.getTicket());
+            }
+
             if (clientTicket.getTicket().getClient().getClientTickets().isEmpty()) {
                 serviceCentre.removeClientWithProduct(clientTicket.getTicket().getClient());
             }
@@ -118,15 +106,17 @@ public class AdminService extends Human {
             System.out.println("There is not such product in service");
             return null;
         }
+
         return clientTicket.getProduct();
     }
 
+
     /**
-     * Admin gives Product to specialist
+     * ServiceCentre.Admin gives ServiceCentre.Product to specialist
      *
      * @param ticket
      * @param specialist
-     * @return true if specialist add ticket (Product) to yourself
+     * @return true if specialist add ticket (ServiceCentre.Product) to yourself
      */
 
     public boolean giveProductToSpecialist(Ticket ticket, Specialist specialist) {
@@ -146,10 +136,10 @@ public class AdminService extends Human {
     }
 
     /**
-     * Take Product on the ticket
+     * Take ServiceCentre.Product on the ticket
      *
      * @param ticket
-     * @return true if Admin receive Product (specialist gave Product to Admin)
+     * @return true if ServiceCentre.Admin receive ServiceCentre.Product (specialist gave ServiceCentre.Product to ServiceCentre.Admin)
      */
     public boolean takeProductFromSpecialist(Ticket ticket) {
         for (Iterator iter = serviceCentre.getSpecialists().iterator(); iter.hasNext(); ) {
@@ -165,10 +155,10 @@ public class AdminService extends Human {
     }
 
     /**
-     * Take Product on the ticket (used Stream)
+     * Take ServiceCentre.Product on the ticket (used Stream)
      *
      * @param ticket
-     * @return true if Admin receive Product (specialist gave Product to Admin)
+     * @return true if ServiceCentre.Admin receive ServiceCentre.Product (specialist gave ServiceCentre.Product to ServiceCentre.Admin)
      */
 
     public boolean takeProductFromSpecialistStream(Ticket ticket) {
@@ -193,7 +183,7 @@ public class AdminService extends Human {
      */
 
     public void showAllClients() {
-        //Set<ClientWithProduct> clientWithProductSet = new HashSet<>();
+        //Set<ServiceCentre.ClientWithProduct> clientWithProductSet = new HashSet<>();
         for (Iterator it = serviceCentre.getClientWithProducts().iterator(); it.hasNext(); ) {
             ClientWithProduct nextClient = (ClientWithProduct) it.next();
             System.out.println(nextClient.toString());
@@ -247,6 +237,14 @@ public class AdminService extends Human {
 
     public int getId() {
         return id;
+    }
+
+    public void showProductInService() {
+        serviceCentre.getTickets().stream().forEach(e -> System.out.println(e.getProduct().toString()));
+    }
+
+    public void showRepairedProduct() {
+        serviceCentre.getRepairedTickets().stream().forEach(e -> System.out.println(e.getProduct().toString()));
     }
 
     @Override

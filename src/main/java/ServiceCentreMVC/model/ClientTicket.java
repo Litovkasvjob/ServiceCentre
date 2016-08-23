@@ -1,3 +1,5 @@
+package ServiceCentreMVC.model;
+
 import java.util.Date;
 
 /**
@@ -39,7 +41,7 @@ public class ClientTicket {
 
     @Override
     public String toString() {
-        return "ClientTicket{" +
+        return "ServiceCentre.ClientTicket{" +
                 "ticket=" + ticket +
                 '}';
     }

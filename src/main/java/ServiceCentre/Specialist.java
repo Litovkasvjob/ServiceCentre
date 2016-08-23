@@ -1,3 +1,5 @@
+package ServiceCentre;
+
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -29,7 +31,7 @@ public class Specialist extends Human {
         return items;
     }
 
-    /*public void setItems(ArrayList<Ticket> items) {
+    /*public void setItems(ArrayList<ServiceCentre.Ticket> items) {
         this.items = items;
     }*/
 
@@ -65,6 +67,6 @@ public class Specialist extends Human {
 
     @Override
     public String toString() {
-        return "Specialist {" + getId() + '}' + super.toString();
+        return "ServiceCentre.Specialist {" + getId() + '}' + super.toString();
     }
 }

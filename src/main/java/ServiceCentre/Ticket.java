@@ -1,3 +1,5 @@
+package ServiceCentre;
+
 import java.util.Date;
 
 /**
@@ -63,7 +65,7 @@ public class Ticket {
 
     @Override
     public String toString() {
-        return "Ticket{" +
+        return "ServiceCentre.Ticket{" +
                 "number=" + number +
                 ", product=" + product +
                 ", putTime=" + putTime +

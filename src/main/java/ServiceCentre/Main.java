@@ -1,3 +1,5 @@
+package ServiceCentre;
+
 /**
  * User: Litovka Serg
  * Date: 27.06.2016
@@ -6,6 +8,7 @@
 public class Main {
     public static void main(String[] args) {
         Menu menu = new Menu();
+
         menu.start();
    }
         }

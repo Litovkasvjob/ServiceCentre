@@ -1,3 +1,5 @@
+package ServiceCentreMVC.model;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -130,6 +132,6 @@ public class ClientWithProduct extends Human implements Client {
 
     @Override
     public String toString() {
-        return "ClientWithProduct: id = " + getId() + super.toString();
+        return "ServiceCentre.ClientWithProduct: id = " + getId() + super.toString();
     }
 }

@@ -1,3 +1,5 @@
+package ServiceCentreMVC.model;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
@@ -18,7 +20,7 @@ public class ServiceCentre {
     private HashSet<ClientWithProduct> clientWithProducts;
     private ArrayList<Ticket> tickets;
     private ArrayList<Ticket> repairedTickets;
-    private ArrayList<Product> products; //Product to buy
+    private ArrayList<Product> products; //ServiceCentre.Product to buy
     private Director director;
     private Address address;
     private String name; // name of company
